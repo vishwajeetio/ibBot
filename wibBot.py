@@ -4,7 +4,7 @@ from tkinter import *
 import threading
 import time
 # import backtest
-import livePurpose
+import wlivePurpose
 
 
 class MainFunc:
@@ -19,8 +19,8 @@ class MainFunc:
         firstrow = LabelFrame(self.mainFrame, text = 'Please select the configuration file', borderwidth = 0, highlightthickness = 0, font = 'Times 16')
         firstrow.grid(row = 0, column = 0)
         self.confFile = StringVar()                  #***************************** config file
-        # self.confFile.set('D:/dev/pstockbotB/betterMethod/trash/config.txt')# comment out at the end
         self.confFile.set('/Users/algorism/dev/bIBBot/shareToMac/config.txt')# comment out at the end
+        # self.confFile.set('D:/dev/pstockbotB/betterMethod/trash/config.txt')# comment out at the end
         confField = Entry(firstrow, textvariable=self.confFile, font = 'Times 14')
         confField.update()
         confField.focus_set()
@@ -32,7 +32,7 @@ class MainFunc:
         confButton.pack(side = "right", padx = 6, pady = (0,2), ipadx = 15)
 
     def startButton(self):
-        startButton = Button(self.mainFrame, text = 'Start', command = self.startLiveGUI, font = 'Times 16')
+        startButton = Button(self.mainFrame, text = 'Start', command = self.startLiveGUI, font = 'Times 16', fg = "red")
         startButton.grid(row = 1, column = 0, pady = 20, ipadx = 35, ipady = 2)
 
     def startLiveGUI(self):
@@ -40,7 +40,7 @@ class MainFunc:
         # try:
         faCredentials = self.getConfFileV()
         if len(faCredentials) > 0:
-            lp = livePurpose.LivePurpose(self.master, faCredentials)
+            lp = wlivePurpose.LivePurpose(self.master, faCredentials)
             self.mainFrame.place_forget()
         else:
             raise Exception('invalid config file')
@@ -62,7 +62,7 @@ class MainFunc:
 
 if __name__ == "__main__":
     root = tkinter.Tk()
-    root.geometry("948x690+300+50")
+    root.geometry("1032x700+300+50")
     # root.resizable(False, False)
     p1 = PhotoImage(file = 'logo.png')
     root.iconphoto(False, p1)

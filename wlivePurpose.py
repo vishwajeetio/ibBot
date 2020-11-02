@@ -1,12 +1,10 @@
 import tkinter
 from tkinter import *
-from tkinter import ttk
+# from tkinter import ttk
 import threading
 import time
 import requests
 from datetime import datetime, timedelta
-
-# ttk.Style().configure('white/blue.TButton', foreground = 'white', background = 'blue')
 
 class LivePurpose:
     def __init__(self, master, confFile):
@@ -45,7 +43,7 @@ class LivePurpose:
     def tableWithScalp(self):
         tableScalp = Frame(self.liveFrame)
         tableScalp.grid(row = 1, column = 0, columnspan = 3)
-        tableArea = Canvas(tableScalp, bg = '#eb4034', width = 920, height = 365, highlightthickness=0) #bg = '#eb4034', 
+        tableArea = Canvas(tableScalp, width = 1000, height = 365, highlightthickness=0, bg = '#eb4034') #bg = '#eb4034', 
         tableArea.pack(side=LEFT, expand=True, fill=BOTH, pady = 5)
         yScrollBar = Scrollbar(tableScalp, orient = VERTICAL)
         yScrollBar.pack(side=RIGHT, fill=Y, padx = (0,10))
@@ -82,11 +80,9 @@ class LivePurpose:
 
         self.sEnableDisable = IntVar()
         self.sEnableDisable.set(1)
-        sEnable = Radiobutton(tableFrame, text = 'Enable', font = 'Times 16', variable = self.sEnableDisable, value = 1, command = self.populateBuy)
-        # sEnable = Radiobutton(tableFrame, text='Enable', font = 'Times 16', indicatoron = 0, width = 6, fg = '#e3faf1', bg = '#5236e0', selectcolor = 'red', activebackground = '#f54747', highlightbackground = '#f54747', activeforeground = '#e3faf1', variable = self.sEnableDisable, value = 1, command = self.populateBuy)
+        sEnable = Radiobutton(tableFrame, text='Enable', font = 'Times 16', variable = self.sEnableDisable, value = 1, command = self.populateBuy)
         sEnable.grid(row = 0, column = 5, columnspan = 4, pady = 10, padx = 10)
-        sDisable = Radiobutton(tableFrame, text = 'Disable', font = 'Times 16', variable = self.sEnableDisable, value = 2, command = self.populateBuy)
-        # sDisable = Radiobutton(tableFrame, text='Disable', font = 'Times 16', indicatoron = 0, width = 6, fg = '#e3faf1', bg = '#5236e0', selectcolor = 'red', activebackground = '#f54747', activeforeground = '#e3faf1', variable = self.sEnableDisable, value = 2, command = self.populateBuy)
+        sDisable = Radiobutton(tableFrame, text='Disable', font = 'Times 16', variable = self.sEnableDisable, value = 2, command = self.populateBuy)
         sDisable.grid(row = 0, column = 9, columnspan = 4, pady = 10, padx = 10)
         for tn in range(1, 45):
             self.tableRows(tableFrame, tn)
@@ -99,7 +95,7 @@ class LivePurpose:
 
         currentO = Frame(mainCurrentO)
         currentO.grid(row = 1, column = 0)
-        buyArea = Canvas(currentO, width = 520, height = 190, highlightthickness=0, bg = '#a830f2')#, bg = '#a830f2'
+        buyArea = Canvas(currentO, width = 590, height = 190, highlightthickness=0, bg = '#a830f2')#, bg = '#a830f2'
         buyArea.pack(side=LEFT,expand=True)
         yScrollBar = Scrollbar(currentO, orient = VERTICAL)
         yScrollBar.pack(side=RIGHT, fill=Y, padx = (0,10))
@@ -109,7 +105,7 @@ class LivePurpose:
         fForExisting = Frame(buyArea)
         buyArea.create_window((0, 0), window = fForExisting, anchor = 'nw')
 
-        cancelOrder = Button(mainCurrentO, text = 'Cancel All Open Orders', font = 'Times 16', bg = '#5236e0', fg = '#e3faf1', activebackground = 'red', activeforeground = '#e3faf1')
+        cancelOrder = Button(mainCurrentO, text = 'Cancel All Open Orders', font = 'Times 16')
         cancelOrder.grid(row = 2, column = 0, pady = (15,7), padx = 5)
         exOrders = ['Buy', 'Sell', 'Buy', 'Sell', 'Sell', 'Buy', 'Buy', 'Sell',]
         for cn in range(len(exOrders)):
@@ -133,8 +129,7 @@ class LivePurpose:
         spaceLabel.grid(row = cn, column = 6, pady = 2, padx = (20,5))
 
         cancelOrderV = IntVar()
-        cancelOrder = Checkbutton(fForExisting, text = 'C', variable = cancelOrderV, onvalue = 1, command = self.populateBuy, fg = 'red')
-        # cancelOrder = Checkbutton(fForExisting, text='C', indicatoron = 0, width = 2, fg = '#e3faf1', bg = '#f54747', selectcolor = '#a87f4d', activebackground = 'red', variable = cancelOrderV,  onvalue = 1, command = self.populateBuy)
+        cancelOrder = Checkbutton(fForExisting, text='C', fg = 'red', variable = cancelOrderV,  onvalue = 1, command = self.populateBuy)
         cancelOrder.grid(row = cn, column = 7, pady = 2, padx = (10,20))
 
     def cSellO(self, fForExisting, cn):
@@ -154,7 +149,7 @@ class LivePurpose:
         orderPrice.grid(row = cn, column = 5, padx = 5, pady = 1, ipady = 2)
         
         modifyOrderV = IntVar()
-        modifyOrder = Checkbutton(fForExisting, text='M', fg  = 'blue', variable = modifyOrderV,  onvalue = 1, command = self.populateBuy)
+        modifyOrder = Checkbutton(fForExisting, text='M', fg = 'blue', variable = modifyOrderV,  onvalue = 1, command = self.populateBuy)
         modifyOrder.grid(row = cn, column = 6, pady = 2, padx = (20,5))
 
         cancelOrderV = IntVar()
@@ -164,7 +159,7 @@ class LivePurpose:
     def buyOrder(self):
         buyO = Frame(self.liveFrame)
         buyO.grid(row = 2, column = 0)
-        buyOne = Canvas(buyO, width = 350, height = 270, bg = '#31f794', highlightthickness=0)
+        buyOne = Canvas(buyO, width = 350, height = 270, highlightthickness=0, bg = '#31f794')#, bg = '#31f794'
         buyOne.pack(side=LEFT,expand=True,fill=BOTH, pady = 10, padx = 5)
         bFrame = Frame(buyOne)
         buyOne.create_window((0, 0), window = bFrame, anchor = 'nw')
@@ -198,7 +193,7 @@ class LivePurpose:
         profitP.grid(row = 4, column = 2, pady = 4, padx = 8)
         profitM = Button(bFrame, text = '-', font = 'Times 14')
         profitM.grid(row = 4, column = 3, pady = 4, padx = (8,20))
-        # placeOrder = ttk.Button(bFrame, text = 'Place Order')
+
         placeOrder = Button(bFrame, text = 'Place Order', font = 'Times 16')
         placeOrder.grid(row = 5, column = 1, pady = 12, padx = 5)
 
@@ -221,11 +216,11 @@ class LivePurpose:
         tbpH.configure({"disabledbackground": '#f0f5ff', "disabledforeground": '#080324'})
         tbpH.grid(row = tn, column = 2, pady = 4, padx = 5, ipady = 3)
 
-        addRadio = Radiobutton(tableFrame, text=tn, indicatoron = 0, width = 2, fg = '#e3faf1', bg = '#0e1d3d', selectcolor = '#f54747', activebackground = 'red', variable = self.addRV, value = tn, command = self.populateBuy)
+        addRadio = Radiobutton(tableFrame, text=tn, fg = 'blue', variable = self.addRV, value = tn, command = self.populateBuy)
         addRadio.grid(row = tn, column = 3, pady = 4, padx = 5)
 
         #Scalp
-        lsButton = Button(tableFrame, text = 'Scalp', font = 'Times 14', fg = '#e3faf1', bg = '#115c1f')
+        lsButton = Button(tableFrame, text = 'Scalp', font = 'Times 14', fg = '#115c1f')
         lsButton.grid(row = tn, column = 5,pady = 4, padx = 5)
         lsMulti = Label(tableFrame, text = 'X', font = 'Times 14')
         lsMulti.grid(row = tn, column = 6, pady = 4, padx = 5)
@@ -239,7 +234,7 @@ class LivePurpose:
         lsButton.grid(row = tn, column = 9, pady = 4, padx = 5)
         spaceLabel = Label(tableFrame, text = ' ')
         spaceLabel.grid(row = tn, column = 10)
-        ssButton = Button(tableFrame, text = 'Short Scalp', font = 'Times 14', fg = '#e3faf1', bg = '#b53333')
+        ssButton = Button(tableFrame, text = 'Short Scalp', font = 'Times 14', fg = '#b53333')
         ssButton.grid(row = tn, column = 11, pady = 4, padx = 5)
         ssMulti = Label(tableFrame, text = 'X', font = 'Times 14', fg = '#080324')
         ssMulti.grid(row = tn, column = 12, pady = 4, padx = 5)
