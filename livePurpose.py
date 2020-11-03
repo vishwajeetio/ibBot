@@ -5,11 +5,28 @@ import threading
 import time
 import requests
 from datetime import datetime, timedelta
+import os
+from googleService import Create_Service
+import logging
 
 class LivePurpose:
-    def __init__(self, master, confFile):
-        self.master = master
+    def __init__(self, master, confFile, cMainFrame):
         self.confFile = confFile
+        #self.logger
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.INFO)
+        formatter = logging.Formatter('%(asctime)s:%(levelname)s:%(message)s')
+        file_handler = logging.FileHandler(self.confFile['Log_File'])
+        file_handler.setFormatter(formatter)
+        stream_handler = logging.StreamHandler()
+        stream_handler.setFormatter(formatter)
+        self.logger.addHandler(file_handler)
+        self.logger.addHandler(stream_handler)
+
+        self.logger.info('New session:')
+        self.master = master
+        self.tickerFromSheet = self.getSheetsData()
+        cMainFrame.place_forget()
         self.liveFrame = Frame(self.master)
         self.liveFrame.place(relx = 0.5, rely = 0.5, anchor = CENTER)
         self.tickerV = StringVar()
@@ -81,6 +98,7 @@ class LivePurpose:
         sEnable.grid(row = 0, column = 5, columnspan = 4, pady = 10, padx = 10)
         sDisable = Radiobutton(tableFrame, text='Disable', font = 'Times 16', variable = self.sEnableDisable, value = 2, command = self.populateBuy)
         sDisable.grid(row = 0, column = 9, columnspan = 4, pady = 10, padx = 10)
+        self.listOfTickerData = {}
         for tn in range(1, 45):
             self.tableRows(tableFrame, tn)
 
@@ -248,6 +266,55 @@ class LivePurpose:
         print('selected')
         self.tickerV.set('hi')
 
+    def getSheetsData(self):
+        CLIENT_SECRET = self.confFile['CLIENT_SECRET']
+        API_NAME = 'sheets'
+        API_VERSION = 'v4'
+        SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
+
+        service = Create_Service(CLIENT_SECRET, API_NAME, API_VERSION, SCOPES)
+        '''
+        Blank spreadsheet file
+        dict_keys(['spreadsheetId', 'properties', 'sheets', 'spreadsheetUrl']
+        sheets_file1 = service.spreadsheets().create().execute()
+        print(sheets_file1['spreadsheetUrl'])
+        '''
+
+        spreadsheetId = self.confFile['Spreadsheet_Id']
+        response = service.spreadsheets().values().get(
+            spreadsheetId= spreadsheetId,
+            majorDimension='ROWS',
+            range='Predictions and Actuals').execute()#!A1:F12
+        symbolList = self.cleanSheetData(response)
+        for i in symbolList:
+            print(i)
+            sResponse = service.spreadsheets().values().get(
+                spreadsheetId= spreadsheetId,
+                majorDimension='ROWS',
+                range=i).execute()
+            print(sResponse)
+            self.getAverageLow(sResponse)
+        # columns = response['values'][0]
+        # data = response['values'][1:]
+        # df = pd.DataFrame(data, columns = columns)
+        return symbolList
+
+    def getAverageLow(self, sResponse):
+        averageLow = 0
+
+        return averageLow
+
+    def cleanSheetData(self, response):
+        vlist = response['values']
+        dataL = vlist[1:]
+        dataD = {}
+        latestD = (dataL[0][0]).strip()
+        symbolList = []
+        for i in dataL:
+            if (i[0]).strip() == latestD:
+                symbolList.append((i[1]).strip())
+        symbolList.sort()
+        return symbolList
 
 
 

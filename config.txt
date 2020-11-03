@@ -1,0 +1,3 @@
+CLIENT_SECRET ==> trash/clientSecret.json
+Spreadsheet_Id ==> 1V6Uk-Cl9-uLFdSyEGKxjjgPocVC3OGq3nhuZPMZ9WbQ
+Log_File ==> trash/ibBot.log
