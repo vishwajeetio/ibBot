@@ -125,26 +125,41 @@
 
 # mainloop()
 
+# from tkinter import *
+
+# def sel():
+#    selection = "You selected the option " + str(var.get())
+#    label.config(text = selection)
+
+# root = Tk()
+# var = IntVar()
+# R1 = Radiobutton(root, text="Option 1", variable=var, value=1,
+#                   command=sel)
+# R1.pack( anchor = W )
+
+# R2 = Radiobutton(root, text="Option 2", variable=var, value=2,
+#                   command=sel)
+# R2.pack( anchor = W )
+
+# R3 = Radiobutton(root, text="Option 3", variable=var, value=3,
+#                   command=sel)
+# R3.pack( anchor = W)
+
+# label = Label(root)
+# label.pack()
+# root.mainloop()
+
+
 from tkinter import *
 
-def sel():
-   selection = "You selected the option " + str(var.get())
-   label.config(text = selection)
-
 root = Tk()
-var = IntVar()
-R1 = Radiobutton(root, text="Option 1", variable=var, value=1,
-                  command=sel)
-R1.pack( anchor = W )
 
-R2 = Radiobutton(root, text="Option 2", variable=var, value=2,
-                  command=sel)
-R2.pack( anchor = W )
+def showGrid():
+    row    = btn.grid_info()['row']      # Row of the button
+    column = btn.grid_info()['column']   # grid_info will return dictionary with all grid elements (row, column, ipadx, ipday, sticky, rowspan and columnspan)
+    print("Grid position of 'btn': {} {}".format(row, column))
 
-R3 = Radiobutton(root, text="Option 3", variable=var, value=3,
-                  command=sel)
-R3.pack( anchor = W)
+btn = Button(root, text = 'Click me!', command = showGrid)
+btn.grid(row = 0, column = 0)
 
-label = Label(root)
-label.pack()
 root.mainloop()
